@@ -119,7 +119,13 @@ Ensure Python and pip are installed, then install the required packages:
 
 sh
    sudo apt install python3 python3-pip -y
-   pip3 install requests flask
+   sudo apt install python3-venv -y
+
+python3 -m venv myenv
+source myenv/bin/activate
+
+pip install requests flask
+   
    
 
 Create the Script File:
