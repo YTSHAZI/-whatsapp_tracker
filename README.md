@@ -1,4 +1,4 @@
-To use this script, follow these steps:
+**To use this script, follow these steps:
 
 
 Setup Instructions
@@ -156,3 +156,4 @@ Open a new terminal window and create a Python script to generate the WhatsApp l
 sh
    nano generate_link.py
    
+**
