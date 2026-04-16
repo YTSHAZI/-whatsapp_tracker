@@ -1,0 +1,52 @@
+import requests
+import json
+import time
+from flask import Flask, request, jsonify
+
+app = Flask(__name__)
+
+# Replace with your actual API key from a geolocation service like ipstack or ipinfo
+GEOLOCATION_API_KEY = 'c270276f05df285a15ef0cc3da2b9eed'
+GEOLOCATION_API_URL = 'http://api.ipstack.com/'
+
+# Function to get geolocation data based on IP address
+def get_geolocation(ip_address):
+    response = requests.get(f'{GEOLOCATION_API_URL}{ip_address}?access_key={c270276f05df285a15ef0cc3da2b9eed}')
+    if response.status_code == 200:
+        data = response.json()
+        return {
+            'ip': data.get('ip'),
+            'city': data.get('city'),
+            'region_name': data.get('region_name'),
+            'country_name': data.get('country_name'),
+            'latitude': data.get('latitude'),
+            'longitude': data.get('longitude')
+        }
+    else:
+        return None
+
+# Endpoint to handle incoming requests from the shared link
+@app.route('/track', methods=['GET'])
+def track_location():
+    # Extract query parameters
+    phone_number = request.args.get('phone')
+    ip_address = request.args.get('ip')
+
+    if not phone_number or not ip_address:
+        return jsonify({'error': 'Missing phone number or IP address'}), 400
+
+    # Get geolocation data
+    geolocation_data = get_geolocation(ip_address)
+    if geolocation_data:
+        return jsonify({
+            'phone_number': phone_number,
+            'geolocation': geolocation_data
+        })
+    else:
+        return jsonify({'error': 'Unable to retrieve geolocation data'}), 500
+
+# Function to generate a WhatsApp shareable link
+def generate_whatsapp_link(phone_number, ip_address):
+    base_url = 'https://api.whatsapp.com/send?phone={}&text={}'
+    text = f'Click here to share your location: http://your_server_ip:5000/track?phone={phone_number}&ip={ip_address}'
+    return
